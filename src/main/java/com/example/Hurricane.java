@@ -3,7 +3,7 @@ package com.example;
 import javax.persistence.*;
 
 /**
- * Created by zach on 10/21/16.
+ * Created by john.tumminelli on 10/21/16.
  */
 @Entity
 @Table(name = "hurricanes")
