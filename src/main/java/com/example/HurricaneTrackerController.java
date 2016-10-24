@@ -17,8 +17,17 @@ public class HurricaneTrackerController {
     HurricaneRepository hurricanes;
 
     @RequestMapping(path = "/", method = RequestMethod.GET)
-    public String home(Model model) {
-        Iterable<Hurricane> hlist = hurricanes.findAll();
+    public String home(Model model, Hurricane.Category category, String search) {
+        List<Hurricane> hlist;
+        if (category != null){
+            hlist = hurricanes.findByCategory(category);
+        }
+        else if(search != null){
+            hlist = hurricanes.findByNameContainingIgnoreCaseOrLocationContainingIgnoreCase(search, search);
+        }
+        else{
+            hlist = (List<Hurricane>) hurricanes.findAll();
+        }
         model.addAttribute("hurricanes", hlist);
         return "home";
     }
