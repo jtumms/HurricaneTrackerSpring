@@ -85,16 +85,10 @@ public class HurricaneTrackerController {
     }
     @RequestMapping(path = "/delete-hurricane", method = RequestMethod.POST)
     public String delete(HttpSession session, int id) throws Exception {
-        String name = (String) session.getAttribute("username");
-        User user = users.findFirstByName(name);
-        Hurricane h = hurricanes.findOne(id);
-        if (user == null){
-            throw new Exception("Not Logged In");
+        if (!validateUser(session, id)){
+            throw new Exception("Not allowed!");
         }
-        else if (!user.name.equals(h.user.name)){
-            throw new Exception("Not yours to delete");
-        }
-        hurricanes.delete(h);
+        hurricanes.delete(id);
         return "redirect:/";
     }
     @RequestMapping(path = "/edit-hurricane", method = RequestMethod.GET)
@@ -102,6 +96,27 @@ public class HurricaneTrackerController {
         Hurricane h = hurricanes.findOne(id);
         model.addAttribute("hurricane", h);
         return "edit";
+    }
+    @RequestMapping(path = "/edit-hurricane", method = RequestMethod.POST)
+    public String editPost(int id, String hname, String hlocation, Hurricane.Category hcategory, String himage, HttpSession session) throws Exception {
+        if (!validateUser(session, id)){
+            throw new Exception("Not allowed!");
+        }
+        Hurricane h = hurricanes.findOne(id);
+        h.name = hname;
+        h.location = hlocation;
+        h.category = hcategory;
+        h.image = himage;
+        hurricanes.save(h);
+        return "redirect:/";
+
+    }
+
+    public boolean validateUser(HttpSession session, int id) {
+        String name = (String) session.getAttribute("username");
+        User user = users.findFirstByName(name);
+        Hurricane h = hurricanes.findOne(id);
+        return user != null && user.name != null && user.name.equals(h.user.name);
     }
 
 }
