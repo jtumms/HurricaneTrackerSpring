@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -40,24 +41,25 @@ public class HurricaneTrackerController {
             hlist = hurricanes.findByNameContainingIgnoreCaseOrLocationContainingIgnoreCase(search, search);
         }
         else{
-            hlist = (List<Hurricane>) hurricanes.findAll();
+            hlist = hurricanes.findByOrderByDateDesc();
         }
         for (Hurricane h : hlist){
             h.isMe = h.user.name.equals(name);
         }
         model.addAttribute("hurricanes", hlist); //used for mustache templating
         model.addAttribute("user", user); //used for mustache templating
+        model.addAttribute("now", LocalDate.now());
         return "home";
     }
 
     @RequestMapping(path = "/hurricane", method = RequestMethod.POST)
-    public String addHurricane(String hname, String hlocation, Hurricane.Category hcategory, String himage, HttpSession session) throws Exception {
+    public String addHurricane(String hname, String hlocation, Hurricane.Category hcategory, String himage, String date, HttpSession session) throws Exception {
         String name = (String) session.getAttribute("username");
         User user = users.findFirstByName(name);
         if (user == null) {
             throw new Exception("Not logged in");
         }
-        Hurricane h = new Hurricane(hname, hlocation, hcategory, himage, user);
+        Hurricane h = new Hurricane(hname, hlocation, hcategory, himage, LocalDate.parse(date), user);
 
         hurricanes.save(h);
         return "redirect:/";
