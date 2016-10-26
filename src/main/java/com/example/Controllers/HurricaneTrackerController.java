@@ -1,5 +1,10 @@
-package com.example;
+package com.example.Controllers;
 
+import com.example.Entitities.Hurricane;
+import com.example.Entitities.User;
+import com.example.Utilities.PasswordStorage;
+import com.example.Services.HurricaneRepository;
+import com.example.Services.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

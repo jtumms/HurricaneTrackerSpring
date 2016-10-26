@@ -1,5 +1,6 @@
-package com.example;
+package com.example.Services;
 
+import com.example.Entitities.User;
 import org.springframework.data.repository.CrudRepository;
 
 /**

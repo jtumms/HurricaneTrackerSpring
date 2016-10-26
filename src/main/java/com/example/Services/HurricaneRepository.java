@@ -1,5 +1,6 @@
-package com.example;
+package com.example.Services;
 
+import com.example.Entitities.Hurricane;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.example;
+package com.example.Utilities;
 
 import java.security.SecureRandom;
 import javax.crypto.spec.PBEKeySpec;

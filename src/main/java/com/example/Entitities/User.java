@@ -1,4 +1,4 @@
-package com.example;
+package com.example.Entitities;
 
 import javax.persistence.*;
 
@@ -11,13 +11,13 @@ import javax.persistence.*;
 public class User {
     @Id
     @GeneratedValue
-    int id;
+    public int id;
 
     @Column(nullable = false, unique = true)
-    String name;
+    public String name;
 
     @Column(nullable = false)
-    String password;
+    public String password;
 
     public User() {
     }
