@@ -85,4 +85,16 @@ public class HurricaneTrackerSpringApplicationTests {
 
 		Assert.assertTrue(h.category == Hurricane.Category.FOUR);
 	}
+	@Test
+	public void dDeleteHurricane() throws Exception {
+
+		Hurricane h = hurricanes.findAll().iterator().next();
+
+		mockMvc.perform(
+				MockMvcRequestBuilders.post("/delete-hurricane")
+				.param("id", h.id + "")
+				.sessionAttr("username", "Alice")
+		);
+		Assert.assertTrue(hurricanes.count() == 0);
+	}
 }
