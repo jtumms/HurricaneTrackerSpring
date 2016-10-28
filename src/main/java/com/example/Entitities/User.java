@@ -1,6 +1,9 @@
 package com.example.Entitities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by john.tumminelli on 10/24/16.
@@ -16,8 +19,13 @@ public class User {
     @Column(nullable = false, unique = true)
     public String name;
 
+    @JsonIgnore
     @Column(nullable = false)
     public String password;
+
+//    @JsonIgnore
+//    @OneToMany(mappedBy = "user")
+//    List<Hurricane> hurricanes;
 
     public User() {
     }
@@ -27,5 +35,11 @@ public class User {
         this.password = password;
     }
 
-
+//    public List<Hurricane> getHurricanes() {
+//        return hurricanes;
+//    }
+//
+//    public void setHurricanes(List<Hurricane> hurricanes) {
+//        this.hurricanes = hurricanes;
+    //}
 }

@@ -1,7 +1,9 @@
 package com.example.Controllers;
 
 import com.example.Entitities.Hurricane;
+import com.example.Entitities.Like;
 import com.example.Entitities.User;
+import com.example.Services.LikeRepository;
 import com.example.Utilities.PasswordStorage;
 import com.example.Services.HurricaneRepository;
 import com.example.Services.UserRepository;
@@ -25,6 +27,9 @@ public class HurricaneTrackerController {
     HurricaneRepository hurricanes;
     @Autowired
     UserRepository users;
+
+    @Autowired
+    LikeRepository likes;
 
     @PostConstruct
     public void init() throws PasswordStorage.CannotPerformOperationException {
@@ -50,6 +55,7 @@ public class HurricaneTrackerController {
         }
         for (Hurricane h : hlist){
             h.isMe = h.user.name.equals(name);
+            h.isLiked = likes.findFirstByUserAndHurricane(user, h) != null;
         }
         model.addAttribute("hurricanes", hlist); //used for mustache templating
         model.addAttribute("user", user); //used for mustache templating
@@ -124,6 +130,25 @@ public class HurricaneTrackerController {
         User user = users.findFirstByName(name);
         Hurricane h = hurricanes.findOne(id);
         return user != null && user.name != null && user.name.equals(h.user.name);
+    }
+    @RequestMapping(path = "/like-hurricane", method = RequestMethod.POST)
+    public String addlike(int id, HttpSession session) throws Exception {
+        String name = (String) session.getAttribute("username");
+        User user = users.findFirstByName(name);
+        Hurricane h = hurricanes.findOne(id);
+        Like like = likes.findFirstByUserAndHurricane(user, h);
+        if (like != null){
+            likes.delete(like);
+        }
+        else {
+            like = new Like(user, h);
+            likes.save(like);
+        }
+
+
+        return "redirect:/";
+
+
     }
 
 }
